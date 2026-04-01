@@ -8,6 +8,7 @@ import NextUpBanner from "./components/NextUpBanner";
 import ProgressBar from "./components/ProgressBar";
 import PhaseNav from "./components/PhaseNav";
 import PhaseSection from "./components/PhaseSection";
+import ChronoView from "./components/ChronoView";
 import FloatingNav from "./components/FloatingNav";
 import OrderToggle from "./components/OrderToggle";
 import MediaModal from "./components/MediaModal";
@@ -22,6 +23,9 @@ function App() {
 
   const nextUp = getNextUp(itemsWithPosters, ordem);
   const filteredItems = getItemsFiltrados(itemsWithPosters);
+
+  // Vista cronológica plana: ordem crono + sem filtro de fase específica
+  const showFlatChrono = ordem === "cronologica" && faseAtiva === null;
 
   const fases = faseAtiva
     ? [FASES.find((f) => f.numero === faseAtiva)!]
@@ -38,22 +42,33 @@ function App() {
       <PhaseNav faseAtiva={faseAtiva} onSetFase={setFase} />
 
       <main className="pt-[150px] pb-24 max-w-6xl mx-auto px-2">
-        {fases.map((fase) => {
-          const faseItems = filteredItems.filter((i) => i.fase === fase.numero);
-          return (
-            <PhaseSection
-              key={fase.numero}
-              fase={fase}
-              items={faseItems}
-              isWatched={isWatched}
-              onCardClick={setSelectedItem}
-              onCardToggle={toggleWatched}
-            />
-          );
-        })}
+        {showFlatChrono ? (
+          <ChronoView
+            items={filteredItems}
+            isWatched={isWatched}
+            onCardClick={setSelectedItem}
+            onCardToggle={toggleWatched}
+          />
+        ) : (
+          fases.map((fase) => {
+            const faseItems = filteredItems.filter((i) => i.fase === fase.numero);
+            return (
+              <PhaseSection
+                key={fase.numero}
+                fase={fase}
+                items={faseItems}
+                isWatched={isWatched}
+                onCardClick={setSelectedItem}
+                onCardToggle={toggleWatched}
+              />
+            );
+          })
+        )}
       </main>
 
-      <FloatingNav faseAtiva={faseAtiva} />
+      {/* FloatingNav só faz sentido na view por fases */}
+      {!showFlatChrono && <FloatingNav faseAtiva={faseAtiva} />}
+
       <OrderToggle ordem={ordem} onToggle={toggleOrdem} />
 
       <MediaModal
