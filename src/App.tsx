@@ -47,6 +47,7 @@ function App() {
               items={faseItems}
               isWatched={isWatched}
               onCardClick={setSelectedItem}
+              onCardToggle={toggleWatched}
             />
           );
         })}

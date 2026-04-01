@@ -5,9 +5,10 @@ interface Props {
   item: MCUItem;
   watched: boolean;
   onClick: () => void;
+  onToggle: () => void;
 }
 
-export default function MediaCard({ item, watched, onClick }: Props) {
+export default function MediaCard({ item, watched, onClick, onToggle }: Props) {
   const tipoCor =
     item.tipo === "Filme"
       ? "bg-red-600"
@@ -18,10 +19,9 @@ export default function MediaCard({ item, watched, onClick }: Props) {
   return (
     <motion.div
       className="relative cursor-pointer rounded-lg overflow-hidden group"
-      onClick={onClick}
+      onClick={watched ? undefined : onClick}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.98 }}
-      layout
     >
       {/* Poster */}
       <div className="aspect-[2/3] relative bg-zinc-800">
@@ -59,16 +59,19 @@ export default function MediaCard({ item, watched, onClick }: Props) {
           #{item.ordemCronologica}
         </span>
 
-        {/* Overlay assistido */}
+        {/* Overlay assistido — clique direto desmarca */}
         {watched && (
           <motion.div
-            className="absolute inset-0 bg-black/60 flex items-center justify-center"
+            className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggle();
+            }}
           >
             <motion.svg
-              className="w-12 h-12 text-green-500"
+              className="w-10 h-10 text-green-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -83,7 +86,24 @@ export default function MediaCard({ item, watched, onClick }: Props) {
                 d="M5 13l4 4L19 7"
               />
             </motion.svg>
+            <span className="text-[10px] text-green-400 font-semibold bg-black/60 px-2 py-0.5 rounded">
+              Assistido
+            </span>
           </motion.div>
+        )}
+
+        {/* Hint de marcar ao hover (nao assistido) */}
+        {!watched && item.lancado && (
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-end justify-center pb-3 opacity-0 group-hover:opacity-100">
+            <span className="text-[10px] text-white font-semibold bg-green-600 px-2 py-1 rounded"
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggle();
+              }}
+            >
+              + Marcar
+            </span>
+          </div>
         )}
       </div>
 

@@ -3,15 +3,32 @@ import type { MCUItem } from "../data/timeline";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY as string;
 const IMG_BASE = "https://image.tmdb.org/t/p/w500";
-const CACHE_KEY = `marvel-watch-posters-${API_KEY?.slice(0, 8) || "no-key"}`;
+const CACHE_KEY = "marvel-watch-posters-v3";
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 horas
+
+type PosterCache = {
+  data: Record<string, string>;
+  ts: number;
+};
 
 function getCachedPosters(): Record<string, string> {
   try {
-    const stored = localStorage.getItem(CACHE_KEY);
-    return stored ? JSON.parse(stored) : {};
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return {};
+    const parsed: PosterCache = JSON.parse(raw);
+    if (Date.now() - parsed.ts > CACHE_TTL_MS) {
+      localStorage.removeItem(CACHE_KEY);
+      return {};
+    }
+    return parsed.data;
   } catch {
     return {};
   }
+}
+
+function saveCache(data: Record<string, string>) {
+  const cache: PosterCache = { data, ts: Date.now() };
+  localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
 }
 
 export function useTmdbPosters(items: MCUItem[]) {
@@ -50,7 +67,7 @@ export function useTmdbPosters(items: MCUItem[]) {
       }
 
       if (!cancelled) {
-        localStorage.setItem(CACHE_KEY, JSON.stringify(newPosters));
+        saveCache(newPosters);
         setPosters(newPosters);
       }
     }

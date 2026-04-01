@@ -8,6 +8,7 @@ interface Props {
   items: MCUItem[];
   isWatched: (id: string) => boolean;
   onCardClick: (item: MCUItem) => void;
+  onCardToggle: (id: string) => void;
 }
 
 const container = {
@@ -22,7 +23,7 @@ const cardVariant = {
   show: { opacity: 1, y: 0 },
 };
 
-export default function PhaseSection({ fase, items, isWatched, onCardClick }: Props) {
+export default function PhaseSection({ fase, items, isWatched, onCardClick, onCardToggle }: Props) {
   if (items.length === 0) return null;
 
   return (
@@ -62,6 +63,7 @@ export default function PhaseSection({ fase, items, isWatched, onCardClick }: Pr
               item={item}
               watched={isWatched(item.id)}
               onClick={() => onCardClick(item)}
+              onToggle={() => onCardToggle(item.id)}
             />
           </motion.div>
         ))}
