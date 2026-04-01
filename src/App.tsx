@@ -3,6 +3,7 @@ import { timeline } from "./data/timeline";
 import type { MCUItem } from "./data/timeline";
 import { useProgress } from "./hooks/useProgress";
 import { useFilter, FASES } from "./hooks/useFilter";
+import { useTmdbPosters } from "./hooks/useTmdbPosters";
 import NextUpBanner from "./components/NextUpBanner";
 import ProgressBar from "./components/ProgressBar";
 import PhaseNav from "./components/PhaseNav";
@@ -12,14 +13,15 @@ import OrderToggle from "./components/OrderToggle";
 import MediaModal from "./components/MediaModal";
 
 function App() {
+  const { itemsWithPosters, getItemWithPoster } = useTmdbPosters(timeline);
   const { isWatched, toggleWatched, totalWatched, totalItems, getNextUp } =
-    useProgress(timeline);
+    useProgress(itemsWithPosters);
   const { ordem, faseAtiva, toggleOrdem, setFase, getItemsFiltrados } =
     useFilter();
   const [selectedItem, setSelectedItem] = useState<MCUItem | null>(null);
 
-  const nextUp = getNextUp(timeline, ordem);
-  const filteredItems = getItemsFiltrados(timeline);
+  const nextUp = getNextUp(itemsWithPosters, ordem);
+  const filteredItems = getItemsFiltrados(itemsWithPosters);
 
   const fases = faseAtiva
     ? [FASES.find((f) => f.numero === faseAtiva)!]
@@ -54,7 +56,7 @@ function App() {
       <OrderToggle ordem={ordem} onToggle={toggleOrdem} />
 
       <MediaModal
-        item={selectedItem}
+        item={selectedItem ? getItemWithPoster(selectedItem) : null}
         onClose={() => setSelectedItem(null)}
         watched={selectedItem ? isWatched(selectedItem.id) : false}
         onToggle={() => {
