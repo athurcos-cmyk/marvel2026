@@ -37,7 +37,7 @@ function App() {
       <ProgressBar totalWatched={totalWatched} totalItems={totalItems} />
       <PhaseNav faseAtiva={faseAtiva} onSetFase={setFase} />
 
-      <main className="pt-[150px] pb-24 max-w-4xl mx-auto px-2">
+      <main className="pt-[150px] pb-24 max-w-6xl mx-auto px-2">
         {fases.map((fase) => {
           const faseItems = filteredItems.filter((i) => i.fase === fase.numero);
           return (

@@ -3,7 +3,7 @@ import type { MCUItem } from "../data/timeline";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY as string;
 const IMG_BASE = "https://image.tmdb.org/t/p/w500";
-const CACHE_KEY = "marvel-watch-posters-v1";
+const CACHE_KEY = `marvel-watch-posters-${API_KEY?.slice(0, 8) || "no-key"}`;
 
 function getCachedPosters(): Record<string, string> {
   try {

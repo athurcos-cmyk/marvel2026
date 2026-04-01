@@ -9,7 +9,7 @@ interface Props {
 export default function PhaseNav({ faseAtiva, onSetFase }: Props) {
   return (
     <div className="fixed top-[100px] left-0 right-0 z-30 bg-zinc-900/95 backdrop-blur-sm border-b border-zinc-800">
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="flex gap-1 overflow-x-auto hide-scrollbar py-2">
           <button
             onClick={() => onSetFase(null)}

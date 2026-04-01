@@ -10,7 +10,7 @@ export default function ProgressBar({ totalWatched, totalItems }: Props) {
 
   return (
     <div className="fixed top-[60px] left-0 right-0 z-30 bg-zinc-900/95 backdrop-blur-sm border-b border-zinc-800">
-      <div className="max-w-4xl mx-auto px-4 py-2">
+      <div className="max-w-6xl mx-auto px-4 py-2">
         <div className="flex items-center justify-between text-xs text-zinc-400 mb-1">
           <span>
             {totalWatched} de {totalItems} assistidos ({pct}%)
