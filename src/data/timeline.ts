@@ -26,8 +26,8 @@ export const timeline: MCUItem[] = [
     ordemCronologica: 1,
     ordemLancamento: 55,
     sinopse: "Guerreiros wakandanos percorrem seculos da historia — do seculo XIII ate 1896 — protegendo artefatos de vibranio pelo mundo. E o titulo mais antigo de toda a cronologia do MCU.",
-    posterUrl: "https://image.tmdb.org/t/p/w500/cS9OE5qZDpZkUhrOBX6hnGZp1z1.jpg",
-    tmdbId: 249522,
+    posterUrl: "https://image.tmdb.org/t/p/w500/fcK54YvKdMTAugHOsBBK4kfrjb4.jpg",
+    tmdbId: 241388,
     lancado: true,
   },
   {
