@@ -39,7 +39,7 @@ export function useTmdbPosters(items: MCUItem[]) {
 
     const cached = getCachedPosters();
     const toFetch = items.filter(
-      (item) => item.tmdbId > 0 && !cached[item.id]
+      (item) => item.tmdbId > 0 && !item.posterUrl && !cached[item.id]
     );
 
     if (toFetch.length === 0) return;
